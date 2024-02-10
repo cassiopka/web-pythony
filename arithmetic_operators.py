@@ -1,5 +1,5 @@
-a = int(input("Введите первое целое число (a): "))
-b = int(input("Введите второе целое число (b): "))
+a = int(input())
+b = int(input())
 
 if 1 <= a <= 10**10 and 1 <= b <= 10**10:
     print(a + b)  
