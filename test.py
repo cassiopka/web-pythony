@@ -65,9 +65,6 @@ test_data = {
     ]
 }
 
-def test_hello_world():
-    assert run_script('hello_world.py') == 'Hello, world!'
-
 @pytest.mark.parametrize("input_data, expected", test_data['python_if_else'])
 def test_python_if_else(input_data, expected):
     assert run_script('python_if_else.py', '\n'.join(input_data)) == expected
@@ -104,6 +101,9 @@ def test_swap_case(input_data, expected):
 def test_split_and_join(input_data, expected):
     assert run_script('split_and_join.py', input_data) == expected
 
+def test_hello_world():
+    assert run_script('hello_world.py') == 'Hello, world!'
+
 def run_script(filename, input_data=None):
     proc = subprocess.run(
         [INTERPRETER, filename],
@@ -117,3 +117,7 @@ def run_script(filename, input_data=None):
 def test_max_word():
     expected_output = "сосредоточенности"
     assert run_script('max_word.py') == expected_output
+
+def test_price_sum():
+    expected_output = "6842.84 5891.06 6810.90"
+    assert run_script('price_sum.py') == expected_output
