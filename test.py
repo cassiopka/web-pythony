@@ -62,6 +62,16 @@ test_data = {
         ('1 2 3 4 5\n', '1-2-3-4-5'),  # Test case with digits
         ('!@#$ %^&*\n', '!@#$-%^&*'),  # Test case with special characters and whitespace
         (' \n', '')  # Test case with only whitespace
+    ],
+    'are_anagrams': [
+        ('listen\nsilent\n', 'YES'),
+        ('triangle\nintegral\n', 'YES' ),
+        ('cat\ntac1\n', 'NO'),
+        ('hello world\nworld hello\n' , 'YES'),
+        ('Listen\nsilent\n', 'NO')
+    ],
+    'metro': [
+        (('1\n0 3\n3'), '0'),  # Проверка на случай отсутствия пассажиров
     ]
 }
 
@@ -100,6 +110,15 @@ def test_swap_case(input_data, expected):
 @pytest.mark.parametrize("input_data, expected", test_data['split_and_join'])
 def test_split_and_join(input_data, expected):
     assert run_script('split_and_join.py', input_data) == expected
+    
+@pytest.mark.parametrize("input_data, expected", test_data['are_anagrams'])
+def test_split_and_join(input_data, expected):
+    assert run_script('anagram.py', input_data) == expected
+    # metro
+@pytest.mark.parametrize("input_data, expected", test_data['metro'])
+def test_split_and_join(input_data, expected):
+    assert run_script('metro.py', input_data) == expected
+
 
 def test_hello_world():
     assert run_script('hello_world.py') == 'Hello, world!'
