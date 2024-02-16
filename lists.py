@@ -18,3 +18,4 @@ for _ in range(N):
         arr.pop()
     elif command[0] == 'reverse':
         arr.reverse()
+

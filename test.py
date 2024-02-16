@@ -71,7 +71,22 @@ test_data = {
         ('Listen\nsilent\n', 'NO')
     ],
     'metro': [
-        (('1\n0 3\n3'), '0'),  # Проверка на случай отсутствия пассажиров
+        (('1\n0 3\n3'), '0'),  
+    ], 
+    'minion_game': [
+        (('BANANA\n'),'Стюарт 12'),
+        (('AEIOU\n'), 'Кевин 15'),
+        (('BCDFG\n'), 'Стюарт 15')
+    ],
+    'is_leap': [
+        ('2016\n', 'True'),
+        ('2024\n', 'True'),
+        ('2000\n', 'True'),
+        ('2400\n', 'True'),
+        ('2017\n', 'False'),
+        ('1900\n', 'False'),
+        ('2100\n', 'False'),
+        ('2200\n', 'False')
     ]
 }
 
@@ -114,11 +129,18 @@ def test_split_and_join(input_data, expected):
 @pytest.mark.parametrize("input_data, expected", test_data['are_anagrams'])
 def test_split_and_join(input_data, expected):
     assert run_script('anagram.py', input_data) == expected
-    # metro
+    
 @pytest.mark.parametrize("input_data, expected", test_data['metro'])
 def test_split_and_join(input_data, expected):
     assert run_script('metro.py', input_data) == expected
+    
+@pytest.mark.parametrize("input_data, expected", test_data['minion_game'])
+def test_split_and_join(input_data, expected):
+    assert run_script('minion_game.py', input_data) == expected
 
+@pytest.mark.parametrize("input_data, expected", test_data['is_leap'])
+def test_split_and_join(input_data, expected):
+    assert run_script('is_leap.py', input_data) == expected
 
 def test_hello_world():
     assert run_script('hello_world.py') == 'Hello, world!'
