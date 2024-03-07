@@ -26,6 +26,25 @@ def test_fact_it(n, expected):
 
 from show_employee import show_employee
 
+@pytest.mark.parametrize("name, salary, expected_output", [
+    ("Alice", 100000, "Alice: 100000 ₽"),
+    ("Bob", 150000, "Bob: 150000 ₽"),
+    ("Eve", 80000, "Eve: 80000 ₽")
+])
+def test_show_employee(name, salary, expected_output):
+    assert show_employee(name, salary) == expected_output
+
+def test_show_employee_default_salary():
+    assert show_employee("Sam") == "Sam: 100000 ₽"
+
+def test_show_employee_custom_salary():
+    assert show_employee("Emma", 110000) == "Emma: 110000 ₽"
+
+def test_show_employee_no_name():
+    with pytest.raises(TypeError):
+        show_employee()
+
+
 def test_show_employee_with_salary():
     name = "Иванов Иван Иванович"
     salary = 30000
@@ -62,6 +81,22 @@ from process_list import process_list_lc, process_list_gen
 def test_process_list(arr, expected):
     assert process_list_lc(arr) == expected
     assert list(process_list_gen(arr)) == expected
+    
+
+@pytest.fixture
+def sample_input():
+    return [1, 2, 3, 4, 5]
+
+def test_process_list_lc(sample_input):
+    expected_output = [1, 4, 9, 8, 25]
+    output = process_list_lc(sample_input)
+    assert output == expected_output
+
+def test_process_list_gen(sample_input):
+    expected_output = [1, 4, 9, 8, 25]
+    output = list(process_list_gen(sample_input))
+    assert output == expected_output
+
 
 
 from my_sum import my_sum
@@ -76,6 +111,19 @@ def test_my_sum():
 ])
 def test_my_sum_args(args, expected):
     assert my_sum(*args) == expected
+
+def test_my_sum_with_empty_args():
+    assert my_sum() == 0
+
+def test_my_sum_with_single_arg():
+    assert my_sum(5) == 5
+
+def test_my_sum_with_multiple_args():
+    assert my_sum(1, 2, 3, 4) == 10
+
+def test_my_sum_with_negative_args():
+    assert my_sum(-1, -2, -3) == -6
+
 
 import subprocess
 import sys
@@ -282,4 +330,68 @@ def test_modulus():
     assert str(result_y) == "7.81+0.00i"
     
     
+from log_decorator import function_logger
+import os
+
+@pytest.fixture
+def log_file(tmpdir):
+    file_path = tmpdir.join("test.log")
+    return str(file_path)
+
+def test_function_logger(log_file):
+    @function_logger(log_file)
+    def add(a, b):
+        return a + b
+
+    add(1, 2)
+
+    with open(log_file, 'r') as file:
+        lines = file.readlines()
+        assert len(lines) == 7
+        assert 'add\n' in lines[0]
+        assert '(1, 2)\n' in lines[2]
+        assert '3\n' in lines[3]
+
+    os.remove(log_file)
+    
+    
+    
+from people_sort import sort_people_by_age
+
+def test_sort_people_by_age():
+    people = [["Mike", "Thomson", "20", "M"],
+              ["Robert", "Bustle", "32", "M"],
+              ["Andria", "Bustle", "30", "F"]]
+    sorted_people = sort_people_by_age(people)
+    assert sorted_people == [["Mike", "Thomson", "20", "M"],
+                             ["Andria", "Bustle", "30", "F"],
+                             ["Robert", "Bustle", "32", "M"]]
+
+
+
+from email_validation import is_valid_email, filter_valid_emails
+
+def test_is_valid_email():
+    assert is_valid_email("lara@mospolytech.ru") == True
+    assert is_valid_email("brian-23@mospolytech.ru") == True
+    assert is_valid_email("britts_54@mospolytech.ru") == True
+    assert is_valid_email("invalid_email") == False
+    assert is_valid_email("invalid.com") == False
+
+def test_filter_valid_emails():
+    emails = ["lara@mospolytech.ru", "brian-23@mospolytech.ru", "britts_54@mospolytech.ru", "invalid_email"]
+    valid_emails = filter_valid_emails(len(emails), emails)
+    assert valid_emails == ["brian-23@mospolytech.ru", "britts_54@mospolytech.ru", "lara@mospolytech.ru"]
+
+
+from circle_square_mk import circle_square_mk
+
+def test_circle_square_mk():
+    radius = 5
+    n_experiments = 100000
+    calculated_square = circle_square_mk(radius, n_experiments)
+    actual_square = 3.14159 * radius ** 2  
+    error = abs(calculated_square - actual_square)
+
+    assert error < 1  
 
