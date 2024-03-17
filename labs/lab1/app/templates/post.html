@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1>{{ post.title }}</h1>
+  <p><strong>Автор:</strong> {{ post.author }}</p>
+  <p><strong>Дата публикации:</strong> {{ post.date }}</p>
+  <img
+    src="{{ url_for('static', filename='images/' + post.image_id) }}"
+    alt="Post image"
+    width="500"
+  />
+  <p>{{ post.text }}</p>
+
+  <hr />
+
+  <h2>Комментарии</h2>
+  {% for comment in post.comments %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ comment.author }}</h5>
+      <p class="card-text">{{ comment.text }}</p>
+      {% if comment.replies %}
+      <h6>Ответы:</h6>
+      {% for reply in comment.replies %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ reply.author }}</h5>
+          <p class="card-text">{{ reply.text }}</p>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <hr />
+
+  <h2>Оставьте комментарий</h2>
+  <form
+    method="POST"
+    action="{{ url_for('add_comment', post_index=post_index) }}"
+  >
+    <div class="form-group">
+      <label for="comment_text">Текст комментария</label>
+      <textarea
+        name="comment_text"
+        class="form-control"
+        rows="3"
+        required
+      ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+  </form>
+</div>
+{% endblock %}
