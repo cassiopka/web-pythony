@@ -1,5 +1,0 @@
-SECRET_KEY = 'f038a541489b89f81762d12edfdd03835ceea10cfb3cdbdabfbfa0f48b0d4802'
-MYSQL_USER = 'std_2429_221_351'
-MYSQL_PASSWORD = '0011602122'
-MYSQL_HOST = 'std-mysql.ist.mospolytech.ru'
-MYSQL_DATABASE = 'std_2429_221_351'
