@@ -3,6 +3,7 @@ import hashlib
 import os
 from werkzeug.utils import secure_filename
 from app import db, app
+from models import Genre, Book, Books_has_Genres, Cover, Review
 
 
 class BooksFilter:
@@ -18,17 +19,26 @@ class BooksFilter:
         amount_to="",
         author="",
     ):
-        if title != "":
+        self.query = Book.query
+
+        if title:
             self.query = self.query.filter(Book.title.ilike(f"%{title}%"))
-        if "0" not in years_list and years_list != []:
-            years_list = [int(x) for x in years_list]
+        if genres_list:
+            # Convert strings to integers:
+            genres_list = [int(g) for g in genres_list]
+            self.query = self.query.join(Books_has_Genres).filter(
+                Books_has_Genres.genres_id.in_(genres_list)
+            )
+        if years_list:
+            years_list = [int(y) for y in years_list]  # Convert to integers
             self.query = self.query.filter(Book.year.in_(years_list))
-        if amount_from != "":
+        if amount_from:
             self.query = self.query.filter(Book.amount >= int(amount_from))
-        if amount_to != "":
+        if amount_to:
             self.query = self.query.filter(Book.amount <= int(amount_to))
-        if author != "":
+        if author:
             self.query = self.query.filter(Book.author.ilike(f"%{author}%"))
+
         return self.query.order_by(Book.year.desc())
 
 

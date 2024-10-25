@@ -38,31 +38,29 @@ from models import *
 
 PER_PAGE = 10
 
-
-@app.route("/")
+    
+@app.route('/', methods=['GET']) 
 def index():
     genres = Genre.query.all()
     book_genre = Books_has_Genres.query.all()
-    books_counter = Book.query.count()
     years = db.session.query(distinct(Book.year)).order_by(desc(Book.year)).all()
     years = [str(year[0]) for year in years]
+    title = request.args.get('title', '') 
+    genres_list = request.args.getlist('genre_id')
+    years_list = request.args.getlist('year')
+    amount_from = request.args.get('amount_from', '')
+    amount_to = request.args.get('amount_to', '')
+    author = request.args.get('author', '') 
+    page = request.args.get('page', 1, type=int)
+    books_counter = Book.query.count()
 
-    page = request.args.get("page", 1, type=int)
-    books = db.session.execute(
-        db.select(Book)
-        .order_by(desc(Book.year))
-        .limit(PER_PAGE)
-        .offset(PER_PAGE * (page - 1))
-    ).scalars()
+
+    books_filter = BooksFilter()
+    books = books_filter.perform(
+        title, genres_list, years_list, amount_from, amount_to, author
+    ).paginate(page=page, per_page=PER_PAGE)  
     page_count = math.ceil(books_counter / PER_PAGE)
-
-    title = request.args.get("title", "")
-    genres_list = request.args.getlist("genre_id")
-    years_list = request.args.getlist("year")
-    amount_from = request.args.get("amount_from", "")
-    amount_to = request.args.get("amount_to", "")
-    author = request.args.get("author", "")
-
+    flag = books.total > 0
     genres_list = [int(x) for x in genres_list]
     flag = True
     if books == []:
