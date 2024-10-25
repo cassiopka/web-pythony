@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <h2 class="my-3 text-center text-uppercase font-weight-bold">Просмотр книги</h2>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Название книги</td>
+                <td>{{ book.title }}</td>
+            </tr>
+            <tr>
+                <td>Жанры</td>
+                <td>
+                    {% for genre in book_genre %}
+                    {% if genre.books_id == book.id %}{{ genre.genre.genre_name }}</br>{% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Автор</td>
+                <td>{{ book.author }}</td>
+            </tr>
+            <tr>
+                <td>Издательство</td>
+                <td>{{ book.publisher }}</td>
+            </tr>
+            <tr>
+                <td>Описание книги</td>
+                <td>{{ book.description | safe }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="col-md-3 mb-3 mb-md-0 d-flex align-items-center justify-content-center">
+        <div class="course-logo" style="background-image: url({{ img }});">
+        </div>
+    </div>
+    {% if current_user.is_authenticated and not review %}
+    <div class="text-center my-3">
+        <a class="btn btn-lg btn-primary" href="{{ url_for('book.review', book_id=book.id) }}">Написать рецензию</a>
+    </div>
+    {% endif %}
+
+    {% if reviews %}
+    {% for review in reviews %}
+    
+    {% if review.status == True%}
+    <div class="d-flex flex-column mt-2 border">
+        <div class="d-flex">
+            <div class="flex-grow-1 ms-3">
+                <h5>{{ review.get_user() }}: Оценка {{ review.rating }} </h5>
+                <p><span>{{ review.text | safe }}</span></p>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

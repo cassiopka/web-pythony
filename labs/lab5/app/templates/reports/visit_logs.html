@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Журнал посещений</h1>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">№</th>
+                <th scope="col">Пользователь</th>
+                <th scope="col">Страница</th>
+                <th scope="col">Дата</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for visit in visits.items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        {% if visit.user %}
+                            {{ visit.user.last_name }} {{ visit.user.first_name }}
+                        {% else %}
+                            Неаутентифицированный пользователь
+                        {% endif %}
+                    </td>
+                    <td>{{ visit.path }}</td>
+                    <td>{{ visit.created_at.strftime('%d.%m.%Y %H:%M:%S') }}</td> 
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <!-- Пагинация -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if visits.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('visit_logs', page=visits.prev_num) }}">Предыдущая</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Предыдущая</span></li>
+                {% endif %}
+
+                {% for page_num in visits.iter_pages(left_edge=2, right_edge=2) %} {# Удалите max_pages #}
+                    {% if page_num %}
+                        {% if visits.page == page_num %}
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('visit_logs', page=page_num) }}">{{ page_num }}</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if visits.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('visit_logs', page=visits.next_num) }}">Следующая</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Следующая</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

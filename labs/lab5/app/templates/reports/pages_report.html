@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Отчет по страницам</h1>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">№</th>
+                <th scope="col">Страница</th>
+                <th scope="col">Количество посещений</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for page in pages %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ page.path }}</td>
+                    <td>{{ page.count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('export_pages_report') }}" class="btn btn-primary">Экспорт в CSV</a>
+    </div>
+{% endblock %}
