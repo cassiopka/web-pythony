@@ -2,7 +2,7 @@ import os
 
 SECRET_KEY = 'secret-key'
 
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://std_2168_exam2:qwerty123@std-mysql.ist.mospolytech.ru/std_2168_exam2'
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://std_2429_exam:123qweASD@std-mysql.ist.mospolytech.ru/std_2429_exam'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True
 
