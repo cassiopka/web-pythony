@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import functools
 from models import User
+from werkzeug.security import generate_password_hash, check_password_hash
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -39,7 +40,7 @@ def login():
         password = request.form.get('password')
         if login and password:
             user = User.query.filter_by(login=login).first()
-            if user and user.password_hash == password:
+            if user and check_password_hash(user.password_hash, password): # Use check_password_hash
                 login_user(user)
                 flash('Вы успешно аутентифицированы.', 'success')
                 next = request.args.get('next')
