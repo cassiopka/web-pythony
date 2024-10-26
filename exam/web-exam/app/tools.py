@@ -3,7 +3,7 @@ import hashlib
 import os
 from werkzeug.utils import secure_filename
 from app import db, app
-from models import Genre, Book, Books_has_Genres, Cover, Review
+from models import Book, Books_has_Genres, Cover, Review
 
 
 class BooksFilter:

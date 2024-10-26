@@ -58,7 +58,7 @@ def login():
             user = User.query.filter_by(login=login).first()
             if user and check_password_hash(
                 user.password_hash, password
-            ):  # Use check_password_hash
+            ):  
                 login_user(user)
                 flash("Вы успешно аутентифицированы.", "success")
                 next = request.args.get("next")

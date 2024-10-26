@@ -6,7 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import distinct, desc
 import markdown
-
+from auth import bp as auth_bp, init_login_manager
+from book import bp as book_bp
+from tools import BooksFilter
+from models import *
 
 app = Flask(__name__)
 application = app
@@ -25,16 +28,13 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db)
 
-from auth import bp as auth_bp, init_login_manager
-from book import bp as book_bp
-from tools import BooksFilter
+
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(book_bp)
 
 init_login_manager(app)
 
-from models import *
 
 PER_PAGE = 10
 
